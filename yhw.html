@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=., initial-scale=1.0">
+    <title>Document</title>
+    <script src="vue.js"></script>
+    <script src="vue-router.js"></script>
+    <style>
+        ul,
+        li,
+        h1 {
+            padding: 0;
+            margin: 0;
+            list-style: none
+        }
+
+        #app {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        ul {
+            width: 200px;
+            flex-direction: column;
+            color: #fff;
+        }
+
+        li {
+            flex: 1;
+            background: #000;
+            margin: 5px auto;
+            text-align: center;
+            line-height: 30px;
+        }
+
+        .about-detail {
+            flex: 1;
+            margin-left: 30px;
+        }
+
+        .about-detail h1 {
+            font-size: 24px;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <ul>
+            <router-link to="/release" tag="li">我发布</router-link>
+            <router-link to="/about" tag="li">我卖出的商品</router-link>
+            <router-link to="/contact" tag="li">我买到的商品</router-link>
+        </ul>
+        <router-view></router-view>
+    </div>
+
+    <template id="about-tmp">
+        <div class="about-detail">
+            <router-link to="/release/detail">在卖|</router-link>
+            <router-link to="/release/governance">已下架</router-link>
+            <router-view></router-view>
+        </div>
+    </template>
+
+    <template id="contact-tmp">
+        <div class="about-detail">
+            <router-link to="/about/detail">全部|</router-link>
+            <router-link to="/about/governance">待付款|</router-link>
+            <router-link to="/about/governance">待发货|</router-link>
+            <router-link to="/about/governance">待收货|</router-link>
+            <router-link to="/about/governance">待评价</router-link>
+
+            <router-view></router-view>
+        </div>
+    </template>
+
+    <script>
+
+        var about = { template: '#about-tmp' }
+
+        var contact = { template: '#contact-tmp' }
+
+        var detail = {
+            template: '<p>全球遴选</p>'
+        }
+
+        var governance = {
+            template: '<p>以人为本</p>'
+        }
+
+
+    </script>
+
+    <script>
+        var router = new VueRouter({
+            routes: [
+                // { path: '/', redirect: '/about' },
+                {
+                    path: '/release',
+                    component: about,
+                    children: [
+                        { path: 'detail', component: detail },
+                        { path: 'governance', component: governance }
+                    ]
+                },
+                {
+                    path: '/about', component: contact,
+                    children: [
+                        { path: 'detail', component: detail },
+                        { path: 'governance', component: governance }
+                    ]
+                },
+                {
+                    path: '/contact', component: contact
+                }
+            ]
+        })
+        var vm = new Vue({
+            el: '#app',
+            router
+        })
+    </script>
+</body>
+
+</html>
